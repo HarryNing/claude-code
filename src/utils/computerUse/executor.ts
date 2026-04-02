@@ -28,7 +28,6 @@
  */
 
 import type {
-  ComputerExecutor,
   DisplayGeometry,
   FrontmostApp,
   InstalledApp,
@@ -36,6 +35,7 @@ import type {
   RunningApp,
   ScreenshotResult,
 } from '@ant/computer-use-mcp'
+import type { ComputerExecutor } from '@ant/computer-use-mcp/types'
 
 import { API_RESIZE_PARAMS, targetImageSize } from '@ant/computer-use-mcp'
 import { logForDebugging } from '../debug.js'

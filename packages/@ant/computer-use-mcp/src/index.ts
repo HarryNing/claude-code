@@ -7,20 +7,25 @@
  */
 
 import type {
+  ComputerUseCapabilities,
   ComputerUseHostAdapter,
   CoordinateMode,
   GrantFlags,
+  InstalledApp,
   Logger,
 } from './types'
 
 // Re-export types from types.ts
 export type { CoordinateMode, Logger } from './types'
 export type {
+  ComputerExecutor as ComputerExecutorShape,
+  ComputerUseCapabilities,
   ComputerUseConfig,
   ComputerUseHostAdapter,
   CuPermissionRequest,
   CuPermissionResponse,
   CuSubGates,
+  InstalledApp,
 } from './types'
 export { DEFAULT_GRANT_FLAGS } from './types'
 
@@ -39,12 +44,6 @@ export interface DisplayGeometry {
 export interface FrontmostApp {
   bundleId: string
   displayName: string
-}
-
-export interface InstalledApp {
-  bundleId: string
-  displayName: string
-  path: string
 }
 
 export interface RunningApp {
@@ -87,6 +86,15 @@ export interface CuCallToolResult {
 
 export type ComputerUseSessionContext = Record<string, unknown>
 
+export interface ComputerUseMcpServer {
+  setRequestHandler(
+    schema: unknown,
+    handler: (...args: unknown[]) => unknown,
+  ): void
+  connect(transport: unknown): Promise<void>
+  close(): Promise<void>
+}
+
 // ---------------------------------------------------------------------------
 // API_RESIZE_PARAMS — 默认的截图缩放参数
 // ---------------------------------------------------------------------------
@@ -102,7 +110,11 @@ export const API_RESIZE_PARAMS = {
 // ---------------------------------------------------------------------------
 
 export class ComputerExecutor {
-  capabilities: Record<string, boolean> = {}
+  capabilities: ComputerUseCapabilities = {}
+
+  async listInstalledApps(): Promise<InstalledApp[]> {
+    return []
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +156,7 @@ export function bindSessionContext(
  * Stub 返回空数组（无工具）。
  */
 export function buildComputerUseTools(
-  _capabilities?: Record<string, boolean>,
+  _capabilities?: ComputerUseCapabilities,
   _coordinateMode?: CoordinateMode,
   _installedAppNames?: string[],
 ): Array<{ name: string; description: string; inputSchema: Record<string, unknown> }> {
@@ -158,6 +170,10 @@ export function buildComputerUseTools(
 export function createComputerUseMcpServer(
   _adapter?: ComputerUseHostAdapter,
   _coordinateMode?: CoordinateMode,
-): null {
-  return null
+): ComputerUseMcpServer {
+  return {
+    setRequestHandler() {},
+    async connect() {},
+    async close() {},
+  }
 }

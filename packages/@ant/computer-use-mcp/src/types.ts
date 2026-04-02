@@ -54,6 +54,20 @@ export interface ComputerUseConfig {
   enabledTools: string[]
 }
 
+export interface InstalledApp {
+  bundleId: string
+  displayName: string
+  path: string
+  iconDataUrl?: string
+}
+
+export interface ComputerUseCapabilities {
+  screenshotFiltering?: boolean | string
+  platform?: boolean | string
+  hostBundleId?: string
+  [key: string]: boolean | string | undefined
+}
+
 export interface ComputerUseHostAdapter {
   serverName: string
   logger: Logger
@@ -66,5 +80,7 @@ export interface ComputerUseHostAdapter {
 }
 
 export interface ComputerExecutor {
-  capabilities: Record<string, boolean>
+  capabilities: ComputerUseCapabilities
+  listInstalledApps(): Promise<InstalledApp[]>
+  [key: string]: unknown
 }
